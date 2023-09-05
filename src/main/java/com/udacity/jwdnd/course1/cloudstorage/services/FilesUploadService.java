@@ -16,8 +16,16 @@ public class FilesUploadService {
     @Autowired
     FilesUploadMapper filesSUploadMapper;
 
+    public FilesUpload findOneFile(MultipartFile files, Integer userId) {
+        return filesSUploadMapper.findOneFile(getPartFiles(files), userId);
+    }
+
     public List<FilesUpload> findAllFiles(Integer userId) {
         return filesSUploadMapper.findAllFiles(userId);
+    }
+
+    public FilesUpload getFileById(Integer fileId, Integer userId) {
+        return filesSUploadMapper.findByUserId(fileId, userId);
     }
 
     public int addFiles(MultipartFile file, Integer userId) throws IOException {
@@ -32,14 +40,6 @@ public class FilesUploadService {
 
     public int deleteFileById(Integer fileId, Integer userId) {
         return filesSUploadMapper.deleteById(fileId, userId);
-    }
-
-    public FilesUpload findOneFile(MultipartFile files, Integer userId) {
-        return filesSUploadMapper.findOneFile(getPartFiles(files), userId);
-    }
-    
-    public FilesUpload getFileById(Integer fileId, Integer userId) {
-        return filesSUploadMapper.findByUserId(fileId, userId);
     }
 
     private String getPartFiles(MultipartFile files) {

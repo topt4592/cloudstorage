@@ -27,36 +27,38 @@ public class FilesUploadController {
 
     @GetMapping("/viewFile")
     public ResponseEntity<byte[]> handleViewFile(@RequestParam("fileId")Integer fileId, Authentication authentication) {
+
         Users users = (Users) authentication.getPrincipal();
         FilesUpload file = filesUploadServices.getFileById(fileId, users.getUserId());
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentDispositionFormData("attachment", file.getFileName());
         headers.setContentType(MediaType.parseMediaType(file.getContentType()));
+        headers.setContentDispositionFormData("attachment", file.getFileName());
         return new ResponseEntity<>(file.getFileData(), headers, HttpStatus.OK);
     }
 
     @PostMapping("/saveFile")
     public String saveFile(Authentication authentication, MultipartFile fileUpload, Model modal) throws IOException {
-        Users users = (Users) authentication.getPrincipal();
-        String errorFilesUpload = "";
 
-        if (fileUpload.isEmpty()) {
-            errorFilesUpload = "File upload is empty";
+        String errorUpload = "";
+        Users users = (Users) authentication.getPrincipal();
+
+        if (fileUpload != null && fileUpload.isEmpty()) {
+        	errorUpload = "File upload empty";
         }
 
         FilesUpload filesExits = filesUploadServices.findOneFile(fileUpload, users.getUserId());
         if (filesExits != null) {
-            errorFilesUpload = " File has been exits.";
+        	errorUpload = " File has been exits.";
         }
 
-        if (!errorFilesUpload.isBlank()) {
-            modal.addAttribute("errorSaveFiles", errorFilesUpload);
+        if (!errorUpload.isBlank()) {
+            modal.addAttribute("errorSaveFiles", errorUpload);
             return "result";
         }
 
         int saveFile = filesUploadServices.addFiles(fileUpload, users.getUserId());
         if (saveFile == 0) {
-            modal.addAttribute("errorSaveFiles", "Upload failed, Upload file again");
+            modal.addAttribute("errorSaveFiles", "Upload failed, Please try again");
             return "result";
         }
 
@@ -66,11 +68,12 @@ public class FilesUploadController {
 
     @GetMapping("/deleteFile")
     public String deleteFile(@RequestParam("fileId") Integer fileid, Authentication authentication, Model modal) {
+
         Users users = (Users) authentication.getPrincipal();
         if (fileid != null) {
             int results = filesUploadServices.deleteFileById(fileid, users.getUserId());
             if (results == 0) {
-                modal.addAttribute("errorSaveFiles", "File Not exist file or error");
+                modal.addAttribute("errorSaveFiles", "Not exist file");
                 return "result";
             }
             modal.addAttribute("resultOK", "Delete file successfully");

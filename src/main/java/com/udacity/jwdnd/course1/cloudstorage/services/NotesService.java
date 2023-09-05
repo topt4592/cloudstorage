@@ -22,8 +22,8 @@ public class NotesService {
         return notesMapper.getNoteById(noteId, userId);
     }
 
-    public int editNoteById(Notes note) {
-        return notesMapper.editNoteById(note);
+    public int updateNoteById(Notes note) {
+        return notesMapper.updateNoteById(note);
     }
 
     public int addNote(Notes note) {

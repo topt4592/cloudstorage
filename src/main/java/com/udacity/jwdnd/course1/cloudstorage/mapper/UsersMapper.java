@@ -9,6 +9,7 @@ import com.udacity.jwdnd.course1.cloudstorage.entity.Users;
 
 @Mapper
 public interface UsersMapper {
+
     @Select("SELECT * FROM USERS WHERE username = #{username}")
     Users findByUsername(String username);
 

@@ -22,6 +22,7 @@ public class UsersController {
 
     @GetMapping("/login")
     public String getViewLogin() {
+
         Authentication authentication =SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || authentication instanceof AnonymousAuthenticationToken) {
             return "login";
@@ -36,6 +37,7 @@ public class UsersController {
 
     @PostMapping("/signup")
     public String doSignup(Users users, Model model, RedirectAttributes redirectAttributes) {
+
         String error = "";
         if (CommonUltis.isValidString(users.getFirstName()) && CommonUltis.isValidString(users.getLastName())
                 && CommonUltis.isValidString(users.getPassword()) && CommonUltis.isValidString(users.getUsername())) {
@@ -48,7 +50,7 @@ public class UsersController {
                 }
             }
         } else {
-            error = "Please input valid First name, Last name, username, password";
+            error = "Please input information";
         }
 
         if (!error.isBlank()) {

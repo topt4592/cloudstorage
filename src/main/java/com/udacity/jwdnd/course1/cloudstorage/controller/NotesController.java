@@ -21,11 +21,11 @@ public class NotesController {
 
     @PostMapping("/saveNotes")
     public String saveNotes(Authentication authentication, Notes notesInput, Model model) {
+
         Users users = (Users) authentication.getPrincipal();
         String error = "";
-        if (!CommonUltis.isValidString(notesInput.getNoteTitle())
-                || !CommonUltis.isValidString(notesInput.getNoteDescription())) {
-            error = "Input notes invalid";
+        if (!CommonUltis.isValidString(notesInput.getNoteTitle()) || !CommonUltis.isValidString(notesInput.getNoteDescription())) {
+            error = "Input invalid";
         }
 
         if (!error.isBlank()) {
@@ -40,28 +40,29 @@ public class NotesController {
             cnt = notesServices.addNote(notesInput);
         } else {
             if (notesServices.getNoteById(notesInput.getNoteId(), users.getUserId()) != null) {
-                cnt = notesServices.editNoteById(notesInput);
+                cnt = notesServices.updateNoteById(notesInput);
             }
         }
 
         if (cnt == 0) {
-            model.addAttribute("errorSaveFiles", "Save note error");
+            model.addAttribute("errorSaveFiles", "Save error");
             return "result";
         }
-        model.addAttribute("resultOK", "Save note successfully");
+        model.addAttribute("resultOK", "Save successfully");
         return "result";
     }
 
     @GetMapping("/deleteNotes")
     public String deleteNote(@RequestParam("noteId")Integer noteId, Authentication authentication, Model model) {
+
         Users users = (Users) authentication.getPrincipal();
         if (noteId != null) {
             int results = notesServices.delNoteById(noteId, users.getUserId());
             if (results == 0) {
-                model.addAttribute("errorSaveFiles", "Detele note error");
+                model.addAttribute("errorSaveFiles", "Detele error");
                 return "result";
             }
-            model.addAttribute("resultOK", "Delete file successfully");
+            model.addAttribute("resultOK", "Delete successfully");
             return "result";
         }
         return "error";

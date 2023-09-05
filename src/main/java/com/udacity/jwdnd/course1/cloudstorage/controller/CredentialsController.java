@@ -22,14 +22,15 @@ public class CredentialsController {
     @GetMapping("/showCredentials")
     @ResponseBody
     public Credentials showCredentials(@RequestParam("credentialId") Integer credentialId, Authentication authentication) {
-        Users users = (Users) authentication.getPrincipal();
-        Credentials credentials = null;
-        credentials = credentialsServices.getCreById(credentialId, users.getUserId());
 
-        if (credentials == null) {
-            return null;
+        Credentials credentials = null;
+        Users users = (Users) authentication.getPrincipal();
+        credentials = credentialsServices.getCredentialById(credentialId, users.getUserId());
+
+        if (credentials != null) {
+        	credentials = credentialsServices.decryptPassword(credentials);
         }
-        credentials = credentialsServices.decryptPassword(credentials);
+
         return credentials;
     }
 
@@ -46,8 +47,8 @@ public class CredentialsController {
         if (credentialId == null) {
             cnt = credentialsServices.addCredentials(credential);
         } else {
-            if (credentialsServices.getCreById(credentialId, users.getUserId()) != null) {
-                cnt = credentialsServices.editCreById(credential);
+            if (credentialsServices.getCredentialById(credentialId, users.getUserId()) != null) {
+                cnt = credentialsServices.updateCreById(credential);
             }
         }
 

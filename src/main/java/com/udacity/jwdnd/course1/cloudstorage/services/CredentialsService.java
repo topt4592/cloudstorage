@@ -22,8 +22,8 @@ public class CredentialsService {
         return credentialsMapper.getAllListCredentials(userId);
     }
 
-    public Credentials getCreById(Integer creId, Integer userId) {
-        return credentialsMapper.getCreById(creId, userId);
+    public Credentials getCredentialById(Integer credentialId, Integer userId) {
+        return credentialsMapper.getCredentialById(credentialId, userId);
     }
 
     public int addCredentials(Credentials credential) {
@@ -35,9 +35,9 @@ public class CredentialsService {
         return credentialsMapper.deleteCreById(creId, userId);
     }
 
-    public int editCreById(Credentials credential) {
+    public int updateCreById(Credentials credential) {
         encryptPassword(credential);
-        return credentialsMapper.editCreById(credential);
+        return credentialsMapper.updateCreById(credential);
     }
 
     public void encryptPassword(Credentials credentials) {

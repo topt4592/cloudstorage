@@ -12,6 +12,7 @@ import com.udacity.jwdnd.course1.cloudstorage.entity.Notes;
 
 @Mapper
 public interface NotesMapper {
+
     @Select("SELECT * FROM NOTES WHERE userid = #{userId}")
     List<Notes> getAllListNotes(Integer userId);
 
@@ -19,7 +20,7 @@ public interface NotesMapper {
     Notes getNoteById(Integer noteId, Integer userId);
 
     @Update("UPDATE NOTES SET notetitle = #{noteTitle}, noteDescription = #{noteDescription} WHERE noteid = #{noteId} and userid = #{userId}")
-    int editNoteById(Notes note);
+    int updateNoteById(Notes note);
 
     @Insert("INSERT INTO NOTES (notetitle, notedescription, userid) VALUES (#{noteTitle}, #{noteDescription}, #{userId})")
     int addNote(Notes note);
